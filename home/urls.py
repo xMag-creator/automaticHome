@@ -14,17 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 
-import automation.views as automation
-
-router = routers.DefaultRouter()
-router.register(r'devices', automation.DeviceViewSet)
+from automation import views as automation
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
-    path('device/', include('rest_framework.urls', namespace='rest_framework')),
+    path('devices/', automation.DeviceListView.as_view()),
+    path('device/<str:name>/', automation.DeviceRetrieveUpdateView.as_view()),
 ]

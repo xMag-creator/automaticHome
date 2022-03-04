@@ -1,13 +1,17 @@
 from .models import Device
-from rest_framework import viewsets
-from rest_framework import permissions
 from .serializers import DeviceSerializer
+from rest_framework import generics
 
 
-class DeviceViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows devices to be viewed or edited.
-    """
+class DeviceListView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+
+
+class DeviceRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = DeviceSerializer
+    lookup_field = 'username'
+
+    def get_object(self):
+        name = self.kwargs["name"]
+        return generics.get_object_or_404(Device, name=name)
